@@ -40,3 +40,15 @@
 
 - 자바 스크립트는 접근 제어자가 존재하지 않는다.
 - 접근 제어자를 구현하기 위해서 노출 모듈 패턴 사용
+  ```javascript
+  const RMP = (()=>{
+	const a = 1;
+	const b = 1;
+	const public = {
+		c: 2;
+		d: ()=>3;
+	}
+	return public 
+})
+//RMP를 호출하여 c와 d에는 접근할 수 있지만 a, b에는 접근이 불가능. 
+```
