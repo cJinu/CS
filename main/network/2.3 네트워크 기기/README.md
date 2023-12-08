@@ -40,7 +40,7 @@ URL, 서버, 캐시, 쿠키 등을 활용하여 트래픽을 분산하고
 
 로드밸런서는 L4 switch도 포함하지만 역할, 기능에서 차이가있다.
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/16174060-eab7-4d6f-aaa1-50a7cca6131d/87926b0a-52c7-44c1-b6b1-ec6e569733aa/Untitled.png)
+![image](https://github.com/cJinu/CS/assets/104177326/aa0fd0fc-2635-4a0a-b1c1-607fcf7b0a93)
 
 L4 sitch는 L4 계층 이상의 데이터를 확인할 수 없으므로 IP/Port 주소에 따라 패킷을 전송하는 것을 목적으로 한다.
 
@@ -105,4 +105,4 @@ NIC 하나 당 MAC주소 하나
 
 공유기랑은 아래와 같은 이유로 구분됩니다.
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/16174060-eab7-4d6f-aaa1-50a7cca6131d/94afc6d6-3ee9-49d8-a66a-34f727429c93/Untitled.png)
+![image](https://github.com/cJinu/CS/assets/104177326/a71a702f-3ef6-48bd-b5ae-a86621d31790)
