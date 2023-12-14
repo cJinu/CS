@@ -64,36 +64,12 @@
 
 - **new(create) - 생성 상태**
     - 프로세스가 생성된 상태.
-    - `fork()` 혹은 `exec()` 함수를 통해 생성
-        > fork()  
-        > - 부모 프로세스를 copy하여 새로운 프로세스를 생성하는 시스템 콜
-        > - COW(Copy on write) 방식 사용 -> 리소스가 복제되었지만 수정되지 않은 경우에는 같은 리소스 공유, 수정되었을 경우 새로운 리소스 생성
-        > ```c
-            #include <stdio.h>
-            #include <stdlib.h>
-            #include <unistd.h>
-             
-            int main(){
-                
-                pid_t pid;
-                int x = 1;
-             
-                pid = fork();
-                if(pid == 0){ /*Child*/
-                    printf("child: x=%d\n", ++x);
-                    exit(0);
-                }
-             
-                /*Parent*/
-                printf("parent: x=%d\n", --x);
-                exit(0);
-            }
-        ```
-        > -
     - PCB가 할당되는 단계
 - **ready- 대기 상태**
     - 프로그램을 실행할 준비가 된 상태
     - 프로세스가 메인 메모리로 로드 되는 단계
+- **ready suspend - 대기 중단 상태**
+  - 메모리 부족으로 일시 중단된 상태태
 - **running - 실행 상태**
     - CPU에 의해 선택되어 실행 중인 상태
     - CPU burst가 일어났다고 표현하기도 한다.
@@ -106,3 +82,97 @@
                 
                 - I/O burst의 빈도수가 높은 I/O bound job 의 시간이 짧고 빈도수 높다.
                 - CPU burst의 빈도수가 높은 CPU burst job 은 시간이 길지만 빈도수가 낮다.
+- **blocked - 중단 상태**
+  - 특정 이벤트가 발생한 이후 기다리며 프로세스가 차단된 상태
+  - I/O 인터럽트로 인해 자주 발생
+- **blocked suspend - 일시 중단 상태**
+  - 중단된 상태에서 프로세스가 실행되려고 했으나 메모리 부족으로 일시 중단된 상태
+- **exit - 종료 상태**
+  - 프로세스가 완료되고 종류하기 직전의 상태
+
+### 💡fork()
+  - 부모 프로세스를 copy하여 새로운 프로세스를 생성하는 시스템 콜
+  -  COW(Copy on write) 방식 사용 -> 리소스가 복제되었지만 수정되지 않은 경우에는 같은 리소스 공유, 수정되었을 경우 새로운 리소스 생성  
+      ```c
+      #fork 예시 코드
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <unistd.h>
+       
+      int main(){
+          
+          pid_t pid;
+          int x = 1;
+       
+          pid = fork();
+          if(pid == 0){ /*Child*/
+              printf("child: x=%d\n", ++x);
+              exit(0);
+          }
+       
+          /*Parent*/
+          printf("parent: x=%d\n", --x);
+          exit(0);
+      }
+      ```
+  - fork()는 프로세스 id를 리턴한다. 부모에서는 자식 pid, 자식에서는 0이 반환된다.
+  - 따라서 결과 값은
+      ```
+      parent: x=0
+      child: x=2
+      ```
+  - 부모와 자식 중 어떤것이 먼저 출력될지는 알 수 없다 -> 스케쥴링 방식에 따라 다름.
+
+## 3.3.3 프로세스의 메모리 구조
+![image](https://github.com/cuzzzu1318/cuzzzu1318.github.io/assets/77597885/01276220-09b1-4927-857a-911569939925)
+- 스택
+  - 지역변수, 매개변수, 리턴값 등 잠시 사용되었다가 사라지는 데이터를 저장하는 영역
+  - 컴파일 시 크기가 결정
+- 힙
+  - 동적으로 할당되는 변수들을 관리하는 영역
+  - 메모리 주소 값에 의해서 참조되고 사용.
+  - 런타임 시 크기가 결정
+- 데이터
+  - 전역변수와 정적변수가 저장되는 영역
+  - 프로그램 시작 시 할당, 종료 시 소멸
+  - BSS segment
+    - 전역 변수 혹은 static, const
+    - 0으로 초기화 혹은 초기화 되지 않은 변수
+  - Data segment
+    - 전역 변수 혹은 static, const
+    - 0이 아닌 값으로 초기화 된 변수
+- 코드
+  - 프로그램의 코드가 저장됨.
+
+## 3.3.4 PCB(Process Control Block)
+![image](https://github.com/cuzzzu1318/cuzzzu1318.github.io/assets/77597885/7e5f8a4a-338f-4247-85f0-39b405e3d4fd)  
+프로세스의 메타데이터를 저장한 데이터  
+운영체제마다 다를 순 있지만 보통 위의 구조를 따른다.  
+- 구조
+  - Pointer
+    - 프로세스의 현재 위치를 저장하는 포인터 정보
+  - Process state
+    - 프로세스의 상태
+  - PID
+    - 프로세스의 고유한 번호
+  - Program Counter
+    - 프로세스에서 실행해야 할 다음 명령어의 주소에 대한 포인터
+  - Registers
+    - 실행하기 위해 필요한 레지스터에 대한 정보
+  - Memory Limits 
+    - 운영체제에서 사용하는 메모리 관리 시스템에 대한 정보
+    - 페이지 테이블, 세그먼트 테이블 등의 정보가 포함될 수 있다.
+  - Open File Lists
+    - 프로세스를 위해 열린 파일 목록
+  - 프로세스 권한
+    - 컴퓨터 자원 또는 I/O 디바이스에 대한 권한 정보
+  - 스케쥴링 정보
+    - 스케쥴러에 의해 중단된 시간 등에 대한 정보
+  - 계정 정보
+    - 프로세스 실행에 사용된 CPU 사용량, 실행한 유저의 정보
+  - I/O 상태 정보
+    - 프로세스에 할당된 I/O디바이스 목록
+- Context Switching(문맥 교환)
+    ![image](https://github.com/cuzzzu1318/cuzzzu1318.github.io/assets/77597885/5e1575bc-b143-457e-baff-61573d3d2d33)
+  - PCB를 교환하는 과정(CPU에서 실행될 프로세스를 교체하는 기술)
+  - 많은 프로세스가 동시에 실행되는 것처럼 보이는 것은 빠른 속도로 컨텍스트 스위칭이 일어나기 때문
