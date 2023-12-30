@@ -1,4 +1,4 @@
-- MVC Pattern
+# MVC Pattern
   - ![image](https://github.com/cJinu/CS/assets/38110757/eabe07fc-a968-4089-9ed9-31cf78d8709e)
   - 정의: Model, View, Controller로 이루어진 디자인 패턴
   - Model: Application의 데이터인 데이터베이스, 상수, 변수 등을 의미
@@ -40,7 +40,7 @@
     - Front controller인 DispatcherServlet은 사용자의 모든 요청을 받고, 그 요청을 분석하여 세부 컨트롤러(Handler)에게 위임
     - 비즈니스 로직 처리 결과는 model에 담겨 다시 front controller에 전달
     - 받은 model을 알맞은 view에 전달 후 결과 화면 return
-- MVP Pattern
+# MVP Pattern
   - ![image](https://github.com/cJinu/CS/assets/38110757/bb789bf1-1cf8-41ed-a581-0d6316db5bf0)
   - 정의: Mode, View, Presenter로 이루어진 디자인 패턴
   - Presenter: View에서 요청한 정보로 model을 가공하여 view에 전달
@@ -50,7 +50,7 @@
 - MVC Pattern과 MVP Pattern의 차이
   1. MVC Pattern의 cotroller와 view는 1:n 관계, MVP Pattern의 presenter와 view는 1:1 관계
   2. MVC Pattern은 view와 model의 의존성이 높음, MVP Pattern은 view와 presenter의 의존성이 높음
-- MVVM Pattern
+# MVVM Pattern
   - ![image](https://github.com/cJinu/CS/assets/38110757/496e9823-2fe9-4bff-b47d-15872eef0b30)
   - 정의: Model, View, View Model로 이루어진 디자인 패턴
   - View Model: View를 표현하기 위해 만든 View를 위한 Model
